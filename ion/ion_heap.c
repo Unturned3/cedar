@@ -106,7 +106,10 @@ int ion_heap_map_user(struct ion_heap *heap, struct ion_buffer *buffer,
 
 static int ion_heap_clear_pages(struct page **pages, int num, pgprot_t pgprot)
 {
-	void *addr = vm_map_ram(pages, num, -1, pgprot);
+	// According to this patch https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20200408115926.1467567-18-hch@lst.de/
+	// The 4th arg to vm_map_ram() is always PAGE_KERNEL, so it was removed
+	//void *addr = vm_map_ram(pages, num, -1, pgprot);
+	void *addr = vm_map_ram(pages, num, -1);
 
 	if (!addr)
 		return -ENOMEM;
